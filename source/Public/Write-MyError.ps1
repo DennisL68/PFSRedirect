@@ -23,7 +23,7 @@
         [Exception]$Exception,
 
         [Parameter(ParameterSetName = 'Exception')]
-        [Parameter(ParameterSetName = 'Message')]
+        [Parameter(ParameterSetName = 'Message', Position = 0)]
         [string]$Message,
 
         [string]$RecommendedAction,

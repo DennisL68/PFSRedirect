@@ -12,7 +12,7 @@
 RootModule = 'PSFRedirect.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.11'
+ModuleVersion = '0.0.12'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -30,7 +30,7 @@ CompanyName = 'DennisL'
 Copyright = '(c) 2025 DennisL. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Redirects all Write-commands of PowerShell to use Write-PSFMessage of the module PSFramework. This is useful for instantly enabling light logging of legacy scripts that only uses Writer-Progress, Write-Host etc. to show progress.'
+Description = 'Redirects all Write-commands of PowerShell to use Write-PSFMessage of the module PSFramework. This is useful for instantly enabling light logging of legacy scripts that only uses Write-Progress, Write-Host etc. to log progress.'
 
 # Minimum version of the Windows PowerShell engine required by this module
 PowerShellVersion = '5.1'
