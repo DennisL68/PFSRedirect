@@ -62,18 +62,19 @@
 
     Import-Module PSFRedirect -Force
 
-    Will activate redirection for this session and configure $PROFILE to always
+    Will activate redirection for this session and configure your $PROFILE to always
     pre-load the PSFRedirect module.
 
 .EXAMPLE
     [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
+    Start-Process PowerShell.exe -NoNewWindow -Wait
 
     Enable-PSFRedirect
 
-    Will also activate redirection for this session and configure $PROFILE to always
+    Will activate redirection for the new session and configure your $PROFILE to always
     pre-load the PSFRedirect module.
 
-    If run as admin, the global $PROFILE will be set to pre-load PSFRedirect.
+    If run as admin, the global $PROFILE will be set to pre-load PSFRedirect instead.
 
 #>
 
