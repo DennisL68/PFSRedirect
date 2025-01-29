@@ -21,10 +21,15 @@
 
     $ThisProfile = $PROFILE
     $MachinePSFRedirect = [System.Environment]::GetEnvironmentVariable('PSFRedirect', 'Machine')
+    if (
+        !($ENV:PSFREDIRECT) -and
+        $MachinePSFRedirect ) {# use machine setting if not set
+            $ENV:PSFREDIRECT = $MachinePSFRedirect
+    }
 
     if ($IsAdmin -and
         $MachinePSFRedirect -in ('TRUE','ENABLED') ) {# use global pwsh profile
-        $ThisProfile = $PROFILE.AllUsersAllHosts
+            $ThisProfile = $PROFILE.AllUsersAllHosts
     }
 
     if (-not (Test-Path $ThisProfile)) {# create profile file
