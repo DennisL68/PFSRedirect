@@ -48,35 +48,32 @@
 
 .NOTES
     To configure your environment to always redirect Write-messages to Write-PSFMessage,
-    set the machine environment variable %PFSREDIRECT% to 'TRUE' or 'ENABLED'.
+    set the machine environment variable %PSFREDIRECT% to 'TRUE' or 'ENABLED'.
 
     Running this as admin will enable redirection for all PowerShell user profiles.
 
 .EXAMPLE
     Enable-PSFRedirect
 
-    Write-Warning 'Hello world'
-    WARNING: [20:31:05][<ScriptBlock>] Hello world
-
-    Get-PSFMessage
-
-    Timestamp            FunctionName    Line Level           TargetObject Message
-    ---------            ------------    ---- -----           ------------ -------
-    2025-01-22 20:31:05  <ScriptBlock>   50   Warning                      Hello world
+    Will active redirection for this sessesion.
 
 .EXAMPLE
     $ENV:PSFREDIRECT = 'TRUE'
 
-    Import-Module PFSRedirect -Force
+    Import-Module PSFRedirect -Force
 
-    Write-Warning 'Hello world'
-    WARNING: [20:37:17][<ScriptBlock>] Hello world
+    Will activate redirection for this session and configure $PROFILE to always
+    pre-load the PSFRedirect module.
 
-    Get-PSFMessage
+.EXAMPLE
+    [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
 
-    Timestamp            FunctionName    Line Level           TargetObject Message
-    ---------            ------------    ---- -----           ------------ -------
-    2025-01-22 20:37:17  <ScriptBlock>   50   Warning                      Hello world
+    Enable-PSFRedirect
+
+    Will also activate redirection for this session and configure $PROFILE to always
+    pre-load the PSFRedirect module.
+
+    If run as admin, the global $PROFILE will be set to pre-load PSFRedirect.
 
 #>
 
