@@ -19,22 +19,22 @@
     $Principal = New-Object System.Security.Principal.WindowsPrincipal($CurrentUser)
     $IsAdmin = $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 
-    $MyProfile = $PROFILE
+    $ThisProfile = $PROFILE
     $MachinePSFRedirect = [System.Environment]::GetEnvironmentVariable('PSFRedirect', 'Machine')
 
     if ($IsAdmin -and
         $MachinePSFRedirect -in ('TRUE','ENABLED') ) {# use global pwsh profile
-        $MyProfile = $PROFILE.AllUsersAllHosts
+        $ThisProfile = $PROFILE.AllUsersAllHosts
     }
 
-    if (-not (Test-Path $MyProfile)) {# create profile file
-        New-Item $MyProfile -ItemType File -Force
+    if (-not (Test-Path $ThisProfile)) {# create profile file
+        New-Item $ThisProfile -ItemType File -Force
     }
 
-    if ($MyProfile -and
+    if ($ThisProfile -and
         $ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {# add module-import to profile
-        if (-not (Select-String $Profile -Pattern 'Import-Module PSFRedirect')) {# if needed
-            'Import-Module PSFRedirect' | Out-File $MyProfile -Append -Encoding utf8
+        if (-not (Select-String $ThisProfile -Pattern 'Import-Module PSFRedirect')) {# if needed
+            'Import-Module PSFRedirect' | Out-File $ThisProfile -Append -Encoding utf8
         }
     }
 
