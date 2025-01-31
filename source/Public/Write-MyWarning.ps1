@@ -6,7 +6,7 @@
     )
     $Caller = (Get-PSCallStack)[1].Command
 
-    Write-PSFMessage -Level Warning -Message $Message -Function $Caller
+    Write-PSFMessage -Level Warning -Message $Message -Tag 'Write-Warning' -Function $Caller
 
 <#
 

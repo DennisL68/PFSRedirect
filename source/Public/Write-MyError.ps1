@@ -36,12 +36,12 @@
 
     Microsoft.PowerShell.Utility\Write-Error @PSBoundParameters
 
-    $LogMessage = "ERROR: $ErrorRecord - $Exeption"
+    $LogMessage = "$ErrorRecord - $Exeption"
     if ($Message) {
-        $LogMessage = "ERROR: $ErrorRecord - $Exeption - $Message"
+        $LogMessage = "$ErrorRecord - $Exeption - $Message"
     }
 
-    Write-PSFMessage -Level Error -Message $LogMessage -Function $Caller
+    Write-PSFMessage -Level Error -Message $LogMessage -Tag 'Write-Error' -Function $Caller
 
 <#
 

@@ -6,7 +6,7 @@
     )
     $Caller = (Get-PSCallStack)[1].Command
 
-    Write-PSFMessage -Level Debug -Message $Message -Function $Caller
+    Write-PSFMessage -Level Debug -Message $Message -Tag 'Write-Debug' -Function $Caller
 
 <#
 

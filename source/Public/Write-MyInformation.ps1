@@ -12,10 +12,8 @@
     }
 
     process {
-        $LogMessage = "$MessageData"
-
         Microsoft.PowerShell.Utility\Write-Output @PSBoundParameters
-        Write-PSFMessage -Level InternalComment -Message $LogMessage -Function $Caller -Tag $Tag
+        Write-PSFMessage -Level InternalComment -Message $MessageData -Tag 'Write-Information' -Function $Caller -Tag $Tag
     }
 
 <#

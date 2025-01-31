@@ -17,15 +17,15 @@
 
     Microsoft.PowerShell.Utility\Write-Progress @PSBoundParameters
 
-    $LogMessage = "PROGRESS: $Activity - $Status"
+    $LogMessage = "$Activity - $Status"
     if ($PercentComplete) {
-        $LogMessage = "PROGRESS: $Activity - $Status - $PercentComplete"
+        $LogMessage = "$Activity - $Status - $PercentComplete"
     }
     if ($SecondsRemaining) {
-        $LogMessage = "PROGRESS: $Activity - $Status - $SecondsRemaining"
+        $LogMessage = "$Activity - $Status - $SecondsRemaining"
     }
 
-    Write-PSFMessage -Level InternalComment -Message $LogMessage -Function $Caller
+    Write-PSFMessage -Level InternalComment -Message $LogMessage -Tag 'Write-Progress' -Function $Caller
 
 <#
 
