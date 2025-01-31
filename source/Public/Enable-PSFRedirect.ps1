@@ -20,15 +20,8 @@
     $IsAdmin    = $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 
     $ThisProfile = $PROFILE
-    $MachinePSFRedirect = [System.Environment]::GetEnvironmentVariable('PSFRedirect', 'Machine')
-    if (
-        !($ENV:PSFREDIRECT) -and
-        $MachinePSFRedirect ) {# use machine setting if not set
-            $ENV:PSFREDIRECT = $MachinePSFRedirect
-    }
-
-    if ($IsAdmin -and
-        $MachinePSFRedirect -in ('TRUE','ENABLED') ) {# use global pwsh profile
+    
+    if ($IsAdmin) {# use global pwsh profile
             $ThisProfile = $PROFILE.AllUsersAllHosts
     }
 
@@ -40,6 +33,13 @@
         $ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {# add module-import to profile
         if (-not (Select-String $ThisProfile -Pattern 'Import-Module PSFRedirect')) {# if needed
             'Import-Module PSFRedirect' | Out-File $ThisProfile -Append -Encoding utf8
+        }
+    }
+
+    if ($ThisProfile -and
+        $ENV:PSFREMOTEPATH) {# add start logging to profile
+        if (-not (Select-String $ThisProfile -Pattern 'Start-PSFRemoteLogging')) {# if needed
+            'Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath' | Out-File $ThisProfile -Append -Encoding utf8
         }
     }
 
@@ -84,6 +84,9 @@
 #>
 
 }#end function Enable-PSFRedirect
+
+Update-EnvironmentVariable -VariableName PSFRedirect
+Update-EnvironmentVariable -VariableName PSFRemotePath
 
 if ($ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {
     Enable-PSFRedirect
