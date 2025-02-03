@@ -57,6 +57,10 @@
 
     Running this as admin will enable redirection for all PowerShell user profiles.
 
+    If you'd like to get a logfile of the output in an additional place besides the
+    PSFRamework default, create the %PSFREMOTEPATH% environment variable and add
+    the folder path where you want all your log files to e saved.
+
 .EXAMPLE
     Enable-PSFRedirect
 
@@ -72,7 +76,7 @@
 
 .EXAMPLE
     [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
-    Start-Process PowerShell.exe -NoNewWindow -Wait
+    Update-EnvironmnetVariable -VariableName PSFRedirect
 
     Enable-PSFRedirect
 
@@ -80,6 +84,16 @@
     pre-load the PSFRedirect module.
 
     If run as admin, the global $PROFILE will be set to pre-load PSFRedirect instead.
+
+.EXAMPLE
+    [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
+    Update-EnvironmnetVariable -VariableName PSFRedirect
+
+    [System.Environment]::SetEnvironmentVariable('PSFRemotePath', '\\MySrv\MyShare\logfolder','Machine')
+    Update-EnvironmnetVariable -VariableName PSFRemotePath
+
+
+    Enable-PSFRedirect
 
 #>
 
