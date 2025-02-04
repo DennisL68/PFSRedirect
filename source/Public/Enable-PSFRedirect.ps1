@@ -1,6 +1,9 @@
 ﻿function Enable-PSFRedirect {
+    if (-not $ENV:PSFREDIRECT)   { Update-EnvironmentVariable -VariableName PSFRedirect   }
+    if (-not $ENV:PSFRemotePath) { Update-EnvironmentVariable -VariableName PSFRemotePath }
+
     if (-not (Get-Alias Write-Warning -ErrorAction SilentlyContinue)) {
-        Write-Warning -Message 'All Write commands are being redirected to Write-PSFMessage'
+        Microsoft.PowerShell.Utility\Write-Warning -Message 'All Write commands are being redirected to Write-PSFMessage'
 
         Set-Alias Write-Information -Value Write-MyInformation  -Scope Global
         Set-Alias Write-Verbose     -Value Write-MyVerbose      -Scope Global
@@ -16,26 +19,39 @@
     }# end if module exists
 
     $CurrentUser = [System.Security.Principal.WindowsIdentity]::GetCurrent()
-    $Principal = New-Object System.Security.Principal.WindowsPrincipal($CurrentUser)
-    $IsAdmin = $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
+    $Principal  = New-Object System.Security.Principal.WindowsPrincipal($CurrentUser)
+    $IsAdmin    = $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 
-    $MyProfile = $PROFILE
-    $MachinePSFRedirect = [System.Environment]::GetEnvironmentVariable('PSFRedirect', 'Machine')
-
-    if ($IsAdmin -and
-        $MachinePSFRedirect -in ('TRUE','ENABLED') ) {# use global pwsh profile
-        $MyProfile = $PROFILE.AllUsersAllHosts
+    $ThisProfile = $PROFILE
+    
+    if ($IsAdmin) {# use global pwsh profile
+            $ThisProfile = $PROFILE.AllUsersAllHosts
     }
 
-    if (-not (Test-Path $MyProfile)) {# create profile file
-        New-Item $MyProfile -ItemType File -Force
-    }
 
-    if ($MyProfile -and
+    if ($ThisProfile -and
         $ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {# add module-import to profile
-        if (-not (Select-String $Profile -Pattern 'Import-Module PSFRedirect')) {# if needed
-            'Import-Module PSFRedirect' | Out-File $MyProfile -Append -Encoding utf8
+        
+        if (-not (Test-Path $ThisProfile)) {# create profile file
+            New-Item $ThisProfile -ItemType File -Force | Out-Null
         }
+        
+        if (-not (Select-String $ThisProfile -Pattern 'Enable-PSFRedirect')) {# if needed
+            'Enable-PSFRedirect' | Out-File $ThisProfile -Append -Encoding utf8
+        }
+    }
+
+    if ($ThisProfile -and
+        $ENV:PSFREMOTEPATH) {# add start logging to profile
+
+        Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands for process ($PID) are being logged to $($ENV:PSFRemotePath)"
+        
+        New-Item  $ENV:PSFRemotePath -ItemType Directory -ErrorAction SilentlyContinue
+        if (-not (Test-Path $ENV:PSFRemotePath)) {
+            Microsoft.PowerShell.Utility\Write-Warning -Message 'Issue with using folder in $ENV:PSFRemotePath variable.'
+        }
+
+        Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath
     }
 
 <#
@@ -48,40 +64,41 @@
 
 .NOTES
     To configure your environment to always redirect Write-messages to Write-PSFMessage,
-    set the machine environment variable %PFSREDIRECT% to 'TRUE' or 'ENABLED'.
+    set the machine environment variable %PSFREDIRECT% to 'TRUE' or 'ENABLED'.
 
     Running this as admin will enable redirection for all PowerShell user profiles.
+
+    If you'd like to get a logfile of the output in an additional place besides the
+    PSFRamework default, create the %PSFREMOTEPATH% environment variable and add
+    the folder path where you want all your log files to e saved.
 
 .EXAMPLE
     Enable-PSFRedirect
 
-    Write-Warning 'Hello world'
-    WARNING: [20:31:05][<ScriptBlock>] Hello world
-
-    Get-PSFMessage
-
-    Timestamp            FunctionName    Line Level           TargetObject Message
-    ---------            ------------    ---- -----           ------------ -------
-    2025-01-22 20:31:05  <ScriptBlock>   50   Warning                      Hello world
+    Will active redirection for this sessesion.
 
 .EXAMPLE
-    $ENV:PSFREDIRECT = 'TRUE'
+    [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
+    Update-EnvironmentVariable -VariableName PSFRedirect
 
-    Import-Module PFSRedirect -Force
+    Enable-PSFRedirect
 
-    Write-Warning 'Hello world'
-    WARNING: [20:37:17][<ScriptBlock>] Hello world
+    Will activate redirection for this session and configure your $PROFILE to always
+    enable PSF redirect.
 
-    Get-PSFMessage
+    If run as admin, the global $PROFILE will be set to pre-load PSFRedirect instead.
 
-    Timestamp            FunctionName    Line Level           TargetObject Message
-    ---------            ------------    ---- -----           ------------ -------
-    2025-01-22 20:37:17  <ScriptBlock>   50   Warning                      Hello world
+.EXAMPLE
+    [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
+    Update-EnvironmentVariable -VariableName PSFRedirect
+
+    [System.Environment]::SetEnvironmentVariable('PSFRemotePath', '\\MySrv\MyShare\logfolder','Machine')
+    Update-EnvironmentVariable -VariableName PSFRemotePath
+
+    Enable-PSFRedirect
+
+    Will add a logfile at \\MySrv\MyShare\logfolder
 
 #>
 
 }#end function Enable-PSFRedirect
-
-if ($ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {
-    Enable-PSFRedirect
-}

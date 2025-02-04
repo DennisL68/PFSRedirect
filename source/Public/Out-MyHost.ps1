@@ -14,9 +14,7 @@
     process {
         Microsoft.PowerShell.Core\Out-Host @PSBoundParameters
 
-        $LogMessage = "OUT: $InputObject"
-
-        Write-PSFMessage -Level InternalComment -Message $LogMessage -Function $Caller
+        Write-PSFMessage -Level InternalComment -Message $InputObject -Tag 'Out-Host' -Function $Caller
     }
 
 <#

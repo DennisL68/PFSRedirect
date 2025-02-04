@@ -27,9 +27,9 @@
 
     Microsoft.PowerShell.Utility\Write-Eventlog @PSBoundParameters
 
-    $LogMessage = "EVENTLOG: $LogName - $Source : $EntryType : $Message"
+    $LogMessage = "$LogName - $Source : $EntryType : $Message"
 
-    Write-PSFMessage -Level VeryVerbose -Message $LogMessage -Function $Caller -Tag $Source
+    Write-PSFMessage -Level VeryVerbose -Message $LogMessage -Tag 'Write-EventLog', $Source -Function $Caller
 
 <#
 

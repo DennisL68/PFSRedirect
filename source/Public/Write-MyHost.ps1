@@ -13,9 +13,9 @@
 
     Microsoft.PowerShell.Utility\Write-Host @PSBoundParameters
 
-    $LogMessage = "HOST: $Object"
+    $LogMessage = "$Object"
 
-    Write-PSFMessage -Level InternalComment -Message $LogMessage -Function $Caller
+    Write-PSFMessage -Level InternalComment -Message $LogMessage -Tag 'Write-Host' -Function $Caller
 
 <#
 

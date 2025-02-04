@@ -6,7 +6,7 @@
     )
     $Caller = (Get-PSCallStack)[1].Command
 
-    Write-PSFMessage -Level Verbose -Message $Message -Function $Caller
+    Write-PSFMessage -Level Verbose -Message $Message -Tag 'Write-Verbose' -Function $Caller
 
 <#
 

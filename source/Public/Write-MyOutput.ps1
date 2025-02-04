@@ -11,10 +11,10 @@
     }
 
     process {
-        $LogMessage = "OUTPUT: $InputObject"
+        $LogMessage = "$InputObject"
 
         Microsoft.PowerShell.Utility\Write-Output @PSBoundParameters
-        Write-PSFMessage -Level InternalComment -Message $LogMessage -Function $Caller
+        Write-PSFMessage -Level InternalComment -Message $LogMessage -Tag 'Write-Output' -Function $Caller
     }
 
 <#
