@@ -42,7 +42,8 @@
     }
 
     if ($ThisProfile -and
-        $ENV:PSFREMOTEPATH) {# add start logging to profile
+        $ENV:PSFRemotePath) {# add start logging to profile
+        $ENV:PSFRemotePath = $ENV:PSFRemotePath.TrimEnd('\')
 
         Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands for process ($PID) are being logged to $($ENV:PSFRemotePath)"
         
