@@ -1,6 +1,6 @@
 ﻿function Enable-PSFRedirect {
     if (-not (Get-Alias Write-Warning -ErrorAction SilentlyContinue)) {
-        Write-Warning -Message 'All Write commands are being redirected to Write-PSFMessage'
+        Microsoft.PowerShell.Utility\Write-Warning -Message 'All Write commands are being redirected to Write-PSFMessage'
 
         Set-Alias Write-Information -Value Write-MyInformation  -Scope Global
         Set-Alias Write-Verbose     -Value Write-MyVerbose      -Scope Global
@@ -38,9 +38,13 @@
 
     if ($ThisProfile -and
         $ENV:PSFREMOTEPATH) {# add start logging to profile
-        if (-not (Select-String $ThisProfile -Pattern 'Start-PSFRemoteLogging')) {# if needed
-            'Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath' | Out-File $ThisProfile -Append -Encoding utf8
+            Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands are being logged to $($ENV:PSFRemotePath)"
+            if (-not (Test-Path $ENV:PSFRemotePath)) {
+                Microsoft.PowerShell.Utility\Write-Warning -Message 'Folder in $ENV:PSFRemotePath variable does not exist'
+            }
+            Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath
         }
+
     }
 
 <#
@@ -87,11 +91,10 @@
 
 .EXAMPLE
     [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
-    Update-EnvironmnetVariable -VariableName PSFRedirect
+    Update-EnvironmentVariable -VariableName PSFRedirect
 
     [System.Environment]::SetEnvironmentVariable('PSFRemotePath', '\\MySrv\MyShare\logfolder','Machine')
-    Update-EnvironmnetVariable -VariableName PSFRemotePath
-
+    Update-EnvironmentVariable -VariableName PSFRemotePath
 
     Enable-PSFRedirect
 

@@ -19,7 +19,7 @@
         Wait        = $true
     }
     Set-PSFLoggingProvider @param
-<# ! Doesn't wait for LoggingProvider
+<# ! Test below doesn't wait for LoggingProvider
     if (-not (Test-Path "$FolderPath\PSF_%ComputerName%_%ProcessId%.log")) {
         throw "Failed to create PSFramework log file at remote $FolderPath"
     }
