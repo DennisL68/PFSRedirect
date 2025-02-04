@@ -38,13 +38,14 @@
 
     if ($ThisProfile -and
         $ENV:PSFREMOTEPATH) {# add start logging to profile
-            Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands are being logged to $($ENV:PSFRemotePath)"
-            if (-not (Test-Path $ENV:PSFRemotePath)) {
-                Microsoft.PowerShell.Utility\Write-Warning -Message 'Folder in $ENV:PSFRemotePath variable does not exist'
-            }
-            Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath
+
+        Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands are being logged to $($ENV:PSFRemotePath)"
+        
+        if (-not (Test-Path $ENV:PSFRemotePath)) {
+            Microsoft.PowerShell.Utility\Write-Warning -Message 'Folder in $ENV:PSFRemotePath variable does not exist'
         }
 
+        Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath
     }
 
 <#
