@@ -46,8 +46,9 @@
 
         Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands for process ($PID) are being logged to $($ENV:PSFRemotePath)"
         
+        New-Item  $ENV:PSFRemotePath -ItemType Directory -ErrorAction SilentlyContinue
         if (-not (Test-Path $ENV:PSFRemotePath)) {
-            Microsoft.PowerShell.Utility\Write-Warning -Message 'Folder in $ENV:PSFRemotePath variable does not exist'
+            Microsoft.PowerShell.Utility\Write-Warning -Message 'Issue with using folder in $ENV:PSFRemotePath variable.'
         }
 
         Start-PSFRemoteLogging -FolderPath $ENV:PSFRemotePath
@@ -77,21 +78,13 @@
     Will active redirection for this sessesion.
 
 .EXAMPLE
-    $ENV:PSFREDIRECT = 'TRUE'
-
-    Import-Module PSFRedirect -Force
-
-    Will activate redirection for this session and configure your $PROFILE to always
-    pre-load the PSFRedirect module.
-
-.EXAMPLE
     [System.Environment]::SetEnvironmentVariable('PSFRedirect','True','Machine')
-    Update-EnvironmnetVariable -VariableName PSFRedirect
+    Update-EnvironmentVariable -VariableName PSFRedirect
 
     Enable-PSFRedirect
 
-    Will activate redirection for the new session and configure your $PROFILE to always
-    pre-load the PSFRedirect module.
+    Will activate redirection for this session and configure your $PROFILE to always
+    enable PSF redirect.
 
     If run as admin, the global $PROFILE will be set to pre-load PSFRedirect instead.
 
@@ -103,6 +96,8 @@
     Update-EnvironmentVariable -VariableName PSFRemotePath
 
     Enable-PSFRedirect
+
+    Will add a logfile at \\MySrv\MyShare\logfolder
 
 #>
 
