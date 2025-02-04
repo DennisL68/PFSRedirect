@@ -21,7 +21,7 @@ To apply the redirections on all your PowerShell sessions, create an environment
 
 If you makes this a machine environment variable and run `Enable-PSFRedirect` as an administrator, the redirection will be done on any PowerShell code through out the system that uses the PowerShell profile at initilization.
 
-To set a log file deestionation besides the default used by PSFramework, create an environment variable named `PSFRemotePath` and configure it with a path of your own choosing, where you would like all log files to be created.
+To set a log file destionation besides the default used by PSFramework, create an environment variable named `PSFRemotePath` and configure it with a path of your own choosing, where you would like all log files to be created.
 
 ## References and links
 
