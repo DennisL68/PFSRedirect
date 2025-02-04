@@ -1,4 +1,7 @@
 ﻿function Enable-PSFRedirect {
+    if (-not $ENV:PSFREDIRECT)   { Update-EnvironmentVariable -VariableName PSFRedirect   }
+    if (-not $ENV:PSFRemotePath) { Update-EnvironmentVariable -VariableName PSFRemotePath }
+
     if (-not (Get-Alias Write-Warning -ErrorAction SilentlyContinue)) {
         Microsoft.PowerShell.Utility\Write-Warning -Message 'All Write commands are being redirected to Write-PSFMessage'
 
@@ -25,21 +28,23 @@
             $ThisProfile = $PROFILE.AllUsersAllHosts
     }
 
-    if (-not (Test-Path $ThisProfile)) {# create profile file
-        New-Item $ThisProfile -ItemType File -Force
-    }
 
     if ($ThisProfile -and
         $ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {# add module-import to profile
-        if (-not (Select-String $ThisProfile -Pattern 'Import-Module PSFRedirect')) {# if needed
-            'Import-Module PSFRedirect' | Out-File $ThisProfile -Append -Encoding utf8
+        
+        if (-not (Test-Path $ThisProfile)) {# create profile file
+            New-Item $ThisProfile -ItemType File -Force | Out-Null
+        }
+        
+        if (-not (Select-String $ThisProfile -Pattern 'Enable-PSFRedirect')) {# if needed
+            'Enable-PSFRedirect' | Out-File $ThisProfile -Append -Encoding utf8
         }
     }
 
     if ($ThisProfile -and
         $ENV:PSFREMOTEPATH) {# add start logging to profile
 
-        Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands are being logged to $($ENV:PSFRemotePath)"
+        Microsoft.PowerShell.Utility\Write-Warning -Message "All Write commands for process ($PID) are being logged to $($ENV:PSFRemotePath)"
         
         if (-not (Test-Path $ENV:PSFRemotePath)) {
             Microsoft.PowerShell.Utility\Write-Warning -Message 'Folder in $ENV:PSFRemotePath variable does not exist'
@@ -102,10 +107,3 @@
 #>
 
 }#end function Enable-PSFRedirect
-
-Update-EnvironmentVariable -VariableName PSFRedirect
-Update-EnvironmentVariable -VariableName PSFRemotePath
-
-if ($ENV:PSFREDIRECT -in ('TRUE','ENABLED')) {
-    Enable-PSFRedirect
-}

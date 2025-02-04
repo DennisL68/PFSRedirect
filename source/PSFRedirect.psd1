@@ -12,7 +12,7 @@
 RootModule = 'PSFRedirect.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.19'
+ModuleVersion = '0.0.23'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
