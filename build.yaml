@@ -74,7 +74,7 @@ BuildWorkflow:
 
   publish:
 
-    - Publish_Release_To_GitHub # Runs first, if token is expired it will fail early
+
     - publish_module_to_gallery
 
 ####################################################
@@ -125,8 +125,7 @@ Pester:
 ModuleBuildTasks:
   Sampler:
     - '*.build.Sampler.ib.tasks'
-  Sampler.GitHubTasks:
-    - '*.ib.tasks'
+
 
 
 # Invoke-Build Header to be used to 'decorate' the terminal output of the tasks.
